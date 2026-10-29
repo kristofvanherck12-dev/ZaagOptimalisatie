@@ -47,7 +47,7 @@ if((longBars.length>=2&&shortBars.length>=2)||wholeFrame){
   cell.append(check);tr.append(cell);
   const viewCell=document.createElement('td'),btn=document.createElement('button');btn.type='button';btn.className='secondary';btn.textContent='Toon in 3D';btn.onclick=e=>{e.stopPropagation();selectStlPart(partId)};
   viewCell.append(btn);tr.append(viewCell);
-  [String(i+1)+' (kader)','30 × 30 × '+length,'Vierkante koker, '+length+' mm; dubbel verstek 45°'].forEach(v=>td(tr,v));
+  [String(i+1),'30 × 30 × '+length,'Vierkante koker, '+length+' mm; dubbel verstek 45°'].forEach(v=>td(tr,v));
   tr.onclick=()=>selectStlPart(partId);$('stlReview').prepend(tr);
  }
  $('frameSplit').style.display='none';
