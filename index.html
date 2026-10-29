@@ -40,7 +40,7 @@ if(railSources.length===2){
    const tr=document.createElement('tr');tr.dataset.part=String(partId);tr.style.cursor='pointer';
    const cell=document.createElement('td'),check=document.createElement('input');check.type='checkbox';check.checked=false;check.setAttribute('aria-label','Leuning '+(railIndex+1)+' '+name+' toevoegen');check.onclick=e=>e.stopPropagation();check.onchange=()=>{if(check.checked)stlChecked.add(partId);else stlChecked.delete(partId);selectStlPart(partId)};cell.append(check);tr.append(cell);
    const viewCell=document.createElement('td'),btn=document.createElement('button');btn.type='button';btn.className='secondary';btn.textContent='Toon in 3D';btn.onclick=e=>{e.stopPropagation();selectStlPart(partId)};viewCell.append(btn);tr.append(viewCell);
-   ['Leuning '+(railIndex+1)+' – '+name,'30 × 30 × 1000','Vierkante koker, 1000 mm; '+angles].forEach(v=>td(tr,v));
+   [String(railIndex*3+j+1),'30 × 30 × 1000','Vierkante koker, 1000 mm; '+angles].forEach(v=>td(tr,v));
    tr.onclick=()=>selectStlPart(partId);$('stlReview').append(tr)
   })
  })
