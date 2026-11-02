@@ -56,7 +56,7 @@ function downloadZaaglijstPDF(){
  finish();
  const objs=[null,'<< /Type /Catalog /Pages 2 0 R >>',null,'<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'];
  const refs=[];
- for(let i=0;i<chunks.length;i++){let pageId=5+i*2,streamId=pageId+1;refs.push(pageId+' 0 R');objs[pageId]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents '+streamId+' 0 R >>';const stream=chunks[i];objs[streamId]='<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream'}
+ for(let i=0;i<chunks.length;i++){let pageId=4+i*2,streamId=pageId+1;refs.push(pageId+' 0 R');objs[pageId]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents '+streamId+' 0 R >>';const stream=chunks[i];objs[streamId]='<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream'}
  objs[2]='<< /Type /Pages /Kids ['+refs.join(' ')+'] /Count '+refs.length+' >>';
  let pdf='%PDF-1.4\n',offsets=[0];
  for(let i=1;i<objs.length;i++){if(!objs[i])throw Error('PDF object ontbreekt: '+i);offsets[i]=pdf.length;pdf+=i+' 0 obj\n'+objs[i]+'\nendobj\n'}
