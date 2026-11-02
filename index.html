@@ -139,6 +139,20 @@ $('stlApply').onclick=()=>{
  if(!stlPending.length){$('stlApply').style.display='none';$('stlSelectAll').style.display='none';$('stlQuickActions').style.display='none';$('stlThicknessWrap').style.display='none'}else stlThicknessOptions();
  try{$('pieces').closest('section').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}
 };
-$('printPieces').onclick=()=>{$('printDate').textContent='Afgedrukt op '+new Date().toLocaleDateString('nl-BE',{day:'2-digit',month:'2-digit',year:'numeric'});window.print()};
+$('printPieces').onclick=()=>{
+ const rows=Array.from($('pieces').querySelectorAll('tr'));
+ if(!rows.length){alert('Voeg eerst onderdelen toe aan de zaaglijst.');return}
+ const date=new Date().toLocaleDateString('nl-BE',{day:'2-digit',month:'2-digit',year:'numeric'});
+ const table=$('pieces').closest('table').cloneNode(true);
+ table.querySelectorAll('tr').forEach(tr=>{if(tr.lastElementChild)tr.lastElementChild.remove()});
+ const head=table.querySelector('thead tr');if(head&&head.lastElementChild)head.lastElementChild.remove();
+ const html='<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Zaaglijst '+date+'</title><style>@page{size:A4;margin:12mm}body{font:14px system-ui,Arial,sans-serif;color:#111;margin:20px}h1{font-size:23px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #aaa;padding:7px;text-align:left}th{background:#eee}tr{break-inside:avoid}.actions{margin:16px 0;padding:12px;background:#eef3f9;border-radius:8px}.actions button{font-size:17px;padding:12px 18px} @media print{.actions{display:none}body{margin:0}}</style></head><body><h1>Zaaglijst</h1><p>Datum: '+date+'</p><div class="actions"><button onclick="window.print()">Afdrukken / Bewaar als PDF</button><p>Op iPhone: kies Afdrukken en gebruik het deelmenu om de PDF te bewaren.</p></div>'+table.outerHTML+'</body></html>';
+ const win=window.open('','_blank');
+ if(win){win.document.open();win.document.write(html);win.document.close();return}
+ const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download='Zaaglijst-'+new Date().toISOString().slice(0,10)+'.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+ alert('De afdrukpagina kon niet openen. De zaaglijst is gedownload; open het bestand in Safari om af te drukken of als PDF te bewaren.');
+};
 $('material').addEventListener('change',sizes);$('shape').addEventListener('change',sizes);sizes();render();drawViewer();
 </script></body></html>
