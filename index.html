@@ -104,7 +104,7 @@ function downloadZaaglijstPDF(){
   });
  }
  lines.push('','TOTAAL: '+totalBars+' staven | Totale restlengte: '+Math.round(totalWaste*100)/100+' mm','','VOLLEDIGE STUKKENLIJST');
- for(const p of pieces)lines.push(p.material+' | '+p.shape+' '+p.size+' | '+p.length+' mm | '+p.qty+' st | '+(p.angles||'Recht'));
+ for(const p of pieces)lines.push(p.material+' | '+p.shape+' '+p.size+' | '+p.length+' mm | '+p.qty+' st');
  if(document.getElementById('showPrices').checked){
   lines.push('','INDICATIEVE MATERIAALPRIJZEN');
   document.querySelectorAll('#prices tr').forEach(tr=>lines.push(Array.from(tr.querySelectorAll('td')).map(td=>td.innerText).join(' | ')));
