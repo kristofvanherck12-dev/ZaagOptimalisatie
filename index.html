@@ -98,9 +98,9 @@ function renderCutting(){
  document.getElementById('cutDone').checked=x.done;
  document.getElementById('cutPrev').disabled=cuttingIndex===0;
  document.getElementById('cutNext').disabled=cuttingIndex===cuttingSteps.length-1;
- document.getElementById('cutStatus').textContent=count===cuttingSteps.length?'Alle onderdelen afgevinkt. Klaar!':'Vink af na het zagen. Met Volgende kun je vooruitkijken.';
+ document.getElementById('cutStatus').textContent=count===cuttingSteps.length?'Alle onderdelen afgevinkt. Klaar!':'Met Volgende bevestig je dat dit onderdeel gezaagd is. Met Vorige kun je terugkijken.';
 }
-function moveCut(n){cuttingIndex=Math.max(0,Math.min(cuttingSteps.length-1,cuttingIndex+n));cuttingSave();renderCutting()}
+function moveCut(n){if(n>0&&cuttingSteps[cuttingIndex])cuttingSteps[cuttingIndex].done=true;cuttingIndex=Math.max(0,Math.min(cuttingSteps.length-1,cuttingIndex+n));cuttingSave();renderCutting()}
 function closeCutting(){document.getElementById('cuttingPanel').style.display='none';cuttingSave()}
 document.addEventListener('change',function(e){if(e.target&&e.target.id==='cutDone'&&cuttingSteps[cuttingIndex]){cuttingSteps[cuttingIndex].done=e.target.checked;cuttingSave();renderCutting()}});
 function showCutPlan(){
