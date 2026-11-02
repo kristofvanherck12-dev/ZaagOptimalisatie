@@ -37,6 +37,7 @@ header h1{font-size:20pt}header>div{display:none}
 #printDate{display:block!important;margin:0 0 5mm;font-size:10pt}
 }
 </style><script>
+function simpleAngleLabel(value){const a=String(value||'').trim();if(!a||/^(recht|straight)/i.test(a))return '';return a.replace(/recht links\s*\/\s*recht rechts/gi,'').trim()}
 function buildCutPlan(){
  const stock=Number(document.getElementById('stock').value),kerf=Number(document.getElementById('kerf').value);
  if(!(stock>0&&Number.isFinite(stock)&&Number.isFinite(kerf)&&kerf>=0))throw Error('Controleer staaflengte en zaagsnede.');
@@ -46,7 +47,7 @@ function buildCutPlan(){
   if(!grouped.has(key))grouped.set(key,[]);
   const qty=Number(p.qty)||0;
   if(qty>10000)throw Error('Te veel stukken voor PDF; verdeel de aantallen.');
-  for(let i=0;i<qty;i++)grouped.get(key).push({length:Number(p.length),angles:p.angles||'Recht'});
+  for(let i=0;i<qty;i++)grouped.get(key).push({length:Number(p.length),angles:simpleAngleLabel(p.angles)});
  }
  const plans=[];
  for(const [profile,parts] of grouped){
@@ -76,7 +77,7 @@ function showCutPlan(){
     const t=document.createElement('strong');t.textContent='Staaf '+(i+1)+' — rest '+rest.toFixed(1)+' mm';box.append(t);
     const strip=document.createElement('div');strip.style.cssText='display:flex;width:100%;height:24px;margin:8px 0;background:#e8e8e8;overflow:hidden;border-radius:4px';
     bar.parts.forEach((part,j)=>{const seg=document.createElement('div');seg.style.cssText='width:'+((part.length+plan.kerf)/plan.stock*100)+'%;background:'+(j%2?'#3e8fb0':'#246d8c')+';border-right:2px solid white';seg.title=part.length+' mm';strip.append(seg)});box.append(strip);
-    const desc=document.createElement('div');desc.textContent=bar.parts.map(p=>p.length+' mm ('+p.angles+')').join(' + ');box.append(desc);area.append(box);
+    const desc=document.createElement('div');desc.textContent=bar.parts.map(p=>p.length+' mm'+(p.angles?' ('+p.angles+')':'')).join(' + ');box.append(desc);area.append(box);
    });
   }
   const summary=document.createElement('strong');summary.textContent='Totaal: '+total+' staven, '+waste.toFixed(1)+' mm restlengte';area.prepend(summary);
@@ -97,7 +98,7 @@ function downloadZaaglijstPDF(){
    totalBars++;
    const waste=Math.max(0,plan.stock-bar.used);totalWaste+=waste;
    lines.push('Staaf '+(i+1)+' ('+plan.stock+' mm):');
-   lines.push('  '+bar.parts.map(p=>p.length+' mm ['+p.angles+']').join(' + '));
+   lines.push('  '+bar.parts.map(p=>p.length+' mm'+(p.angles?' ['+p.angles+']':'')).join(' + '));
    lines.push('  Gebruikt incl. zaagsneden: '+Math.round(bar.used*100)/100+' mm | Rest: '+Math.round(waste*100)/100+' mm');
   });
  }
