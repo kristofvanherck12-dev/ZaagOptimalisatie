@@ -281,7 +281,7 @@ async function importOds(file){
   const vals=[];
   for(const cell of Array.from(row.children).filter(c=>c.localName==='table-cell'||c.localName==='covered-table-cell')){
    const repeat=Math.min(50,Number(cell.getAttributeNS(ns,'number-columns-repeated'))||1);
-   const value=cell.getAttribute('office:value')||Array.from(cell.getElementsByTagNameNS(tx,'p')).map(p=>p.textContent).join(' ').trim();
+   const value=cell.getAttributeNS('urn:oasis:names:tc:opendocument:xmlns:office:1.0','value')||Array.from(cell.getElementsByTagNameNS(tx,'p')).map(p=>p.textContent).join(' ').trim();
    for(let k=0;k<repeat&&vals.length<50;k++)vals.push(value);
   }
   if(vals.some(v=>String(v).trim()))rows.push(vals);
