@@ -557,7 +557,7 @@ $('stlApply').onclick=()=>{
  try{$('pieces').closest('section').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}
 };
 
-$('material').addEventListener('change',sizes);$('shape').addEventListener('change',sizes);sizes();render();drawViewer();
+$('material').addEventListener('change',refreshProfileShapes);$('shape').addEventListener('change',sizes);refreshProfileShapes();render();drawViewer();
 
 // Projectbeheer: afzonderlijke projecten bewaren op dit toestel.
 const PROJECT_KEY='zaag-projecten-v1';
@@ -591,7 +591,7 @@ function openProjectById(id){
  if(activeProjectId&&activeProjectId!==id)saveActiveProject();
  projectLoading=true;activeProjectId=id;localStorage.setItem(ACTIVE_KEY,id);
  pieces=Array.isArray(p.pieces)?JSON.parse(JSON.stringify(p.pieces.slice(0,1000))):[];
- $('projectName').value=p.name;$('material').value=p.material||'Staal';$('shape').value=p.shape||'Vierkante koker';sizes();
+ $('projectName').value=p.name;$('material').value=p.material||'Staal';refreshProfileShapes();$('shape').value=p.shape||'Vierkante koker';sizes();
  if(p.size&&Array.from($('size').options).some(o=>o.value===p.size))$('size').value=p.size;
  $('stock').value=p.stock||'6000';$('kerf').value=p.kerf||'3';$('pieceLength').value='';$('pieceQty').value='';$('useMitre').checked=false;updateMitrePreview();persist();projectLoading=false;refreshProjects();projectStatus('Project "'+p.name+'" geopend. Wijzigingen worden automatisch opgeslagen.');
 }
