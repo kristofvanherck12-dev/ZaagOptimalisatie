@@ -642,7 +642,7 @@ $('projectName').addEventListener('input',scheduleProjectSave);
 ['material','shape','size','stock','kerf'].forEach(id=>$(id).addEventListener('change',scheduleProjectSave));
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){clearTimeout(projectSaveTimer);saveActiveProject()}});
 window.addEventListener('pagehide',()=>{clearTimeout(projectSaveTimer);saveActiveProject()});
-document.getElementById('bottomSaveProject').addEventListener('click',()=>{
+document.addEventListener('DOMContentLoaded',()=>document.getElementById('bottomSaveProject').addEventListener('click',()=>{
  const status=document.getElementById('bottomSaveStatus');
  if(!activeProjectId){
   const name=prompt('Geef je project een naam:',$('projectName').value.trim()||'');
@@ -654,7 +654,7 @@ document.getElementById('bottomSaveProject').addEventListener('click',()=>{
  clearTimeout(projectSaveTimer);saveActiveProject();
  const saved=getProjects().find(p=>p.id===activeProjectId);
  status.textContent=saved?'Project "'+saved.name+'" opgeslagen op dit toestel.':'Opslaan mislukt.';
-});
+}));
 refreshProjects();
 if(activeProjectId&&getProjects().some(p=>p.id===activeProjectId))openProjectById(activeProjectId);
 else{activeProjectId='';localStorage.removeItem(ACTIVE_KEY);refreshProjects()}
