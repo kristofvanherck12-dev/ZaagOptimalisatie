@@ -648,6 +648,7 @@ const DRIVE_ROOT='1rmI6iIXPJxfseZYI3kNBhQkzh-rNWoln';
 let driveToken='',driveExpiry=0;
 function driveMessage(s){$('bottomSaveStatus').textContent=s}
 function driveGoogleScript(){return new Promise((ok,fail)=>{if(window.google?.accounts?.oauth2)return ok();const t=document.createElement('script');t.src='https://accounts.google.com/gsi/client';t.onload=ok;t.onerror=()=>fail(Error('Google-aanmelding kan niet laden.'));document.head.append(t)})}
+driveGoogleScript().catch(()=>{});
 async function driveLogin(){
  if(driveToken&&Date.now()<driveExpiry-60000)return;
  await driveGoogleScript();
@@ -714,8 +715,8 @@ $('driveOpenProject').onclick=async()=>{
   if(answer===null)return;
   const folder=folders[Number(answer)-1];if(!folder)throw Error('Ongeldig nummer.');
   const files=await driveList(folder.id,'application/json'),file=files.find(x=>x.name.startsWith('Project - '));if(!file)throw Error('Geen projectbestand gevonden.');
-  const blob=await driveFetch('https://www.googleapis.com/drive/v3/files/'+file.id+'?alt=media');
-  const p=JSON.parse(await blob.text()).project;
+  const downloaded=await driveFetch('https://www.googleapis.com/drive/v3/files/'+file.id+'?alt=media');
+  const p=(downloaded instanceof Blob?JSON.parse(await downloaded.text()):downloaded).project;
   if(!p||typeof p.name!=='string'||!Array.isArray(p.pieces)||!Array.isArray(p.shopItems))throw Error('Ongeldig projectbestand.');
   if(!confirm('Project "'+p.name+'" openen uit Google Drive?'))return;
   if(activeProjectId)saveActiveProject();
